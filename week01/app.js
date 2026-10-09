@@ -10,7 +10,7 @@ app.get('/about', (req, res) => {
 	res.send('<h1>HELLO!</h1><p>I\'m JS Lim.<br>Nice to meet you</p>');
 });
 app.get('/photo', (req, res) => {
-	res.send('<img src="hobanwoo.png" />');
+	res.send('<img src="https://www.knu.ac.kr/wbbs/img/intro/new_ch_basic.png" />');
 });
 app.get('/time', (req, res) => {
 	const now = new Date();

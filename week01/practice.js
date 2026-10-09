@@ -1,15 +1,33 @@
 // ===== 아래 4개의 함수를 구현해 주세요. =====
 
 function findPost(posts, id) {
+	const result = posts.find(p=> p.id === id);
+	return result??null;
 }
 
 function searchPosts(posts, keyword) {
+	let result = [];
+	for (const p of posts) {
+		if (p.title.includes(keyword)) {result.push(p);}
+	}
+	return result;
 }
 
 function addPost(posts, title, author) {
+	let max_id = 0;
+	for (const p of posts) {
+		if (p.id > max_id) {max_id = p.id;}
+	}
+	const result = { id: max_id + 1, title, author };
+	posts.push(result);
+	return result;
 }
 
 function renderPostList(posts) {
+	const renderSingle = p=>(`<li>[${p.id}] ${p.title} (${p.author})</li>`);
+	
+	if (posts.length === 0) {return "<p>글이 없습니다</p>";}
+	return (`<ul>${posts.map(p=>renderSingle(p)).join('')}</ul>`);
 }
 
 // ===== 이 아래는 채점 코드입니다. 수정하지 마세요 =====

@@ -189,5 +189,37 @@ app.post('/posts/:id/delete', requireLogin, (req, res) => {
 });
 
 
+// ------ routers: ADDITIONAL IMPLEMENTS ------
+/* give user's posts */
+app.get('/my', requireLogin, (req, res) => {
+	// check id
+	const my_id = req.session.user.id;
+	
+	const posts = db.prepare(`
+		SELECT posts.id, posts.title, users.username
+		FROM posts JOIN users ON posts.user_id = users.id  -- join two tables 
+		WHERE posts.user_id = ?
+		ORDER BY posts.id 
+	`).all(my_id);
+	
+	res.render('list', { posts });
+});
+
+app.post('/admin/users/:id/role', requireAdmin, (req, res) => {
+	const target_id = Number(req.params.id);  				// make sure 'id' be pure number
+	const role = db.prepare(`SELECT role FROM users WHERE id = ?`).get(target_id);
+	
+	// determine next role
+	var next_role;
+	if (role['role'] === 'admin') { next_role = 'user'; }
+	else 						  { next_role = 'admin'; }
+
+	// change role
+	const result = db.prepare("UPDATE users SET role = ? WHERE id = ?")
+					 .run(next_role, target_id);
+	
+	res.redirect(`/admin`);
+});
+
 
 app.listen(PORT, () => { console.log(`서버 실행 중: http://localhost:${PORT}`); });

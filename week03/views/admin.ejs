@@ -7,6 +7,9 @@
 				<% for (const u of users) { %>
 					<li>
 						<p>[<%= u.id %>] <%= u.username %> (<%= u.role %>)</p>
+						<form method="POST" action="/admin/users/<%= u.id %>/role">
+							<button>역할 바꾸기</button>
+						</form>
 					</li>
 				<% } %>
 			</ul>

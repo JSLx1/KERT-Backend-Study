@@ -36,6 +36,12 @@ db.exec(`
 		content TEXT NOT NULL,
 		user_id INTEGER NOT NULL  -- foreign key
 	);
+	CREATE TABLE IF NOT EXISTS comments (
+		id      INTEGER PRIMARY KEY AUTOINCREMENT,
+		content TEXT NOT NULL,
+		user_id INTEGER NOT NULL,  -- foreign key
+		post_id INTEGER NOT NULL  -- foreign key
+	);
 `);
 
 //
@@ -149,9 +155,16 @@ app.get('/posts/:id', (req, res) => {
 		SELECT p.id, p.title, p.content, p.user_id, u.username 
 		FROM posts as p, users as u 
 		WHERE p.id = ? AND u.id = p.user_id`).get(id);
+		
+	const comm = db.prepare(`
+		SELECT c.content, u.username 
+		FROM comments as c, posts as p, users as u 
+		WHERE p.id = ? AND c.post_id = p.id AND c.user_id = u.id 
+		ORDER BY c.id`).all(id);
+		
 	if (!post) return res.status(404).send('글이 없습니다');
 	
-	res.render('detail', { post }); 				// show
+	res.render('detail', { post, comm }); 				// show
 });
 
 /* give writing post page */
@@ -219,6 +232,22 @@ app.post('/admin/users/:id/role', requireAdmin, (req, res) => {
 					 .run(next_role, target_id);
 	
 	res.redirect(`/admin`);
+});
+
+app.post('/posts/:id/comments', requireLogin, (req, res) => {
+	const id = Number(req.params.id);  				// make sure 'id' be pure number
+	const my_id = req.session.user.id;
+	const { content } = req.body;
+	
+	// reject request with blank content
+	if (content.trim() === '') {
+		return res.status(400).redirect('/posts/new');
+	}
+	
+	const result = db.prepare(`INSERT INTO comments (content, user_id, post_id)
+											 VALUES (?, ?, ?)`).run(content, my_id, id);
+	
+	res.redirect(`/posts/${id}`);
 });
 
 

@@ -10,6 +10,22 @@
 			<button>삭제</button>
 		</form>
 	<% } %>
+	
+	
+	<h3>댓글</h3>
+	<form method="POST" action="/posts/<%= post.id %>/comments">
+		<p><textarea name="content" placeholder="내용"></textarea></p>
+		<button>댓글 쓰기</button>
+	</form>
+	<% if (comm.length === 0) { %> <p>댓글이 없습니다</p> <% } else { %>
+		<ul>
+			<% for (const c of comm) { %>
+				<li>
+					<p><%= c.content %> (<%= c.username %>)</p>
+				</li>
+			<% } %>
+		</ul>
+		<% } %>
 
 	<a href="/posts">목록으로</a>
 <%- include('partials/footer') %>

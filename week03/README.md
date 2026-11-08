@@ -28,12 +28,25 @@
 
 ## 점검 결과
 ```
-필수 21 / 22 통과
-도전 2 / 3 통과
+필수 22 / 22 통과
+도전 3 / 3 통과
 ```
 
 ## (도전) 구현한 것
 - `GET /my`: 내가 쓴 글 모아보기 (로그인 필요)
 - `POST /admin/users/:id/role`: 지정한 유저의 권한 변경 (관리자)
+- `POST /posts/:id/comments`: 댓글 작성 (로그인 필요)
 
-<!-- (선택) 내 글 모아보기 · 회원 권한 바꾸기 · 댓글 중 구현한 것을 적으세요. -->
+### 새로운 DB
+```
+comments (
+	id      INTEGER PRIMARY KEY AUTOINCREMENT,
+	content TEXT NOT NULL,
+	user_id INTEGER NOT NULL,  -- foreign key (users)
+	post_id INTEGER NOT NULL   -- foreign key (posts)
+);
+```
+
+### 기존 라우트에서의 변경 사항
+- `GET /posts/:id`: 글의 상세 내용 + 글에 달린 댓글 목록 (모두)
+- `/posts/:id`에 댓글을 다는 form 추가

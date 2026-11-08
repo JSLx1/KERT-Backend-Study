@@ -1,23 +1,52 @@
 # KERT 웹 백엔드 스터디 - 3주차
 
-<!-- 이 파일 속 내용을 직접 채워주세요! 주석(이 줄 같은 회색 글)은 다 채운 뒤 지워도 됩니다. -->
-
 ## 실행 방법
-
-<!-- 이 레포를 처음 clone 한 사람이 그대로 따라 하면 서버가 뜨도록 순서대로 적으세요. -->
+`npm`, `node.js`가 설치되어 있어야 합니다.
+1. 터미널 실행 후, 레포지토리를 clone한 디렉토리로 이동합니다.
+2. `npm install`을 실행, 의존성 패키지를 다운로드합니다.
+3. clone한 디렉토리에서 `node app.js`를 실행합니다. 
+4. `localhost:3000`에 서버가 열렸습니다!
 
 ## 관리자 계정 만드는 법
-
-<!-- 회원가입부터 관리자로 로그인하기까지 순서대로 적으세요. -->
+1. `/signup`에서 아이디, 비밀번호를 입력, 회원가입 버튼을 클릭해 회원가입합니다.
+2. 레포지토리가 위치한 디렉토리에서 `node make-admin.js {username}` 커맨드를 입력합니다.  
+   (`{username}`에는 관리자로 만들 아이디를 입력합니다)
+3. 1에서 회원가입한 아이디로 로그인하고, 관리자 계정이 되었음을 확인합니다
 
 ## 구현한 라우트
+- `GET /signup`, `GET /login`: 회원가입/로그인 페이지 표시 (모두)
+- `POST /signup`, `POST /login`: 회원가입/로그인 처리 (모두)
+- `POST /logout`: 로그아웃 처리 (로그인한 사람)
 
-<!-- 메서드 · 주소 · 누가 쓸 수 있는지 적으세요. 예: GET /admin : 회원 목록 (관리자) -->
+- `GET /posts`: 글 목록 (모두)
+- `GET /posts/:id`: 글의 상세 내용 (모두)
+- `GET /posts/new`: 새로운 글 쓰기 페이지 표시 (로그인 필요)
+- `POST /posts`: 글 쓰기 처리 (로그인 필요)
+- `POST /posts/:id/delete`: 글 삭제 (작성자, 관리자 한정)
+
+- `GET /admin`: 회원 목록 (관리자)
 
 ## 점검 결과
-
-<!-- 서버를 켠 상태에서 node check.js 를 실행한 결과의 마지막 두 줄을 적으세요. -->
+```
+필수 22 / 22 통과
+도전 3 / 3 통과
+```
 
 ## (도전) 구현한 것
+- `GET /my`: 내가 쓴 글 모아보기 (로그인 필요)
+- `POST /admin/users/:id/role`: 지정한 유저의 권한 변경 (관리자)
+- `POST /posts/:id/comments`: 댓글 작성 (로그인 필요)
 
-<!-- (선택) 내 글 모아보기 · 회원 권한 바꾸기 · 댓글 중 구현한 것을 적으세요. -->
+### 새로운 DB
+```
+comments (
+	id      INTEGER PRIMARY KEY AUTOINCREMENT,
+	content TEXT NOT NULL,
+	user_id INTEGER NOT NULL,  -- foreign key (users)
+	post_id INTEGER NOT NULL   -- foreign key (posts)
+);
+```
+
+### 기존 라우트에서의 변경 사항
+- `GET /posts/:id`: 글의 상세 내용 + 글에 달린 댓글 목록 (모두)
+- `/posts/:id`에 댓글을 다는 form 추가

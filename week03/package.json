@@ -1,0 +1,19 @@
+{
+  "name": "week03",
+  "version": "1.0.0",
+  "description": "간단한 DB와 로그인/로그아웃 등을 구현한 코드",
+  "main": "check.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "ejs": "^7.0.2",
+    "express": "^5.3.0",
+    "express-session": "^1.19.0"
+  }
+}

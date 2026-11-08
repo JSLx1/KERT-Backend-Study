@@ -1,0 +1,18 @@
+	<%- include('partials/header') %>
+	
+		<h2>관리자 - 회원 목록</h2>
+		<% if (users.length === 0) { %> <p>사용자가 없습니다 (근데 이런 상황이 있을 수 없음)</p> 
+		<% } else { %>
+			<ul>
+				<% for (const u of users) { %>
+					<li>
+						<p>[<%= u.id %>] <%= u.username %> (<%= u.role %>)</p>
+						<form method="POST" action="/admin/users/<%= u.id %>/role">
+							<button>역할 바꾸기</button>
+						</form>
+					</li>
+				<% } %>
+			</ul>
+		<% } %>
+
+	<%- include('partials/footer') %>
